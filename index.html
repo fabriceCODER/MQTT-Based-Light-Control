@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQTT Light Control</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        button { padding: 10px 20px; font-size: 18px; margin: 10px; cursor: pointer; }
+        .on { background-color: green; color: white; }
+        .off { background-color: red; color: white; }
+    </style>
+</head>
+<body>
+
+    <h1>MQTT Light Control</h1>
+    <button class="on" onclick="sendMessage('ON')">Turn ON</button>
+    <button class="off" onclick="sendMessage('OFF')">Turn OFF</button>
+    <p>Status: <span id="status">Waiting for command...</span></p>
+
+    <script>
+        const broker = "wss://test.mosquitto.org:8081/mqtt"; // Public MQTT broker over WebSockets
+        const topic = "/student_group/light_control";
+
+        const client = mqtt.connect(broker);
+
+        client.on("connect", () => {
+            console.log("Connected to MQTT Broker");
+        });
+
+        function sendMessage(message) {
+            client.publish(topic, message);
+            document.getElementById("status").innerText = "Sent: " + message;
+        }
+    </script>
+
+</body>
+</html>
